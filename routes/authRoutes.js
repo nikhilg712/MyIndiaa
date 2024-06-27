@@ -1,19 +1,23 @@
 const express = require('express');
-const { registerUser, authUser } = require('../controllers/authController');
-const { validate } = require('../middleware/validateInput');
-const { body } = require('express-validator');
+const { registerUser, authUser } = require('../controllers/authController'); // Import controller functions
+const { validate } = require('../middleware/validateInput'); // Import validation middleware
+const { body } = require('express-validator'); // Import Express Validator's 'body' function
 
-const router = express.Router();
+const router = express.Router(); // Create a new router instance
 
+// Route for user registration
 router.post('/register', [
-    body('name').not().isEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Enter a valid email'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-], validate, registerUser);
+    // Validation middleware for 'register' route
+    body('name').not().isEmpty().withMessage('Name is required'), // Name must not be empty
+    body('email').isEmail().withMessage('Enter a valid email'), // Email must be a valid email format
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long') // Password must be at least 6 characters long
+], validate, registerUser); // Use 'validate' middleware to check validations and 'registerUser' controller function to handle registration
 
+// Route for user login
 router.post('/login', [
-    body('email').isEmail().withMessage('Enter a valid email'),
-    body('password').exists().withMessage('Password is required')
-], validate, authUser);
+    // Validation middleware for 'login' route
+    body('email').isEmail().withMessage('Enter a valid email'), // Email must be a valid email format
+    body('password').exists().withMessage('Password is required') // Password must exist
+], validate, authUser); // Use 'validate' middleware to check validations and 'authUser' controller function to handle authentication
 
-module.exports = router;
+module.exports = router; // Export the router for use in other files
